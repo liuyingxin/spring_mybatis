@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.bean.Emp">
+
+    <select id="selectEmp" resultType="com.xin.bean.Emp">
+        select * from emp
+    </select>
+
+    <select id="selectEmp1" resultType="com.xin.bean.Emp">
+        select * from emp
+    </select>
+    <!--eviction: 移除策略 LRU（最近最少使用）FIFO(先进先出)
+         flushInterval:缓存刷新时间（毫秒）
+         readOnly：只读   size：容量 1024个-->
+    <!--<cache eviction="" flushInterval="" readOnly="" size=""></cache>-->
+
+
+    <insert id="insertEmp" useGeneratedKeys="true">
+        insert into emp
+        (eno,ename)
+        values(#{eno},#{ename})
+--         获取自增长主键
+        <selectKey keyProperty="id" resultType="int">
+            select @@identity as id
+        </selectKey>
+    </insert>
+
+    <update id="updateEmp">
+        update emp
+        set
+         eno=#{eno},
+         ename=#{ename}
+         where id=#{id}
+
+    </update>
+
+    <delete id="deleteEmp">
+        delete from Emp where id=#{id}
+    </delete>
+</mapper>

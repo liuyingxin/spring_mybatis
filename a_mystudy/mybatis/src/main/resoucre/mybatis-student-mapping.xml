@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="student">
+    
+    <resultMap id="studentMap" type="com.xin.bean.Student">
+        <id column="sid" property="sid"></id>
+        <result column="sname" property="sname"></result>
+        <association property="classes" javaType="com.xin.bean.Classes">
+            <id column="cid" property="cid"></id>
+            <result column="cname" property="cname"></result>
+        </association>
+
+    </resultMap>
+    <select id="selectStudent" resultMap="studentMap">
+          select
+          s.*,
+          c.cname
+          from student as s
+          join classes c on s.cid=c.cid
+          where sid=#{sid}
+
+    </select>
+
+    <resultMap id="classMap" type="com.xin.bean.Classes">
+        <id column="cid" property="cid"></id>
+        <result column="cname" property="cname"></result>
+        <collection property="students" ofType="com.xin.bean.Student"
+                    select="selectStudentByClasses" column="cid"></collection>
+
+    </resultMap>
+    <select id="selectClasses" resultMap="classMap">
+          select *
+          from classes
+          where cid=#{cid}
+    </select>
+    <select id="selectStudentByClasses" resultType="com.xin.bean.Student" >
+          select *
+          from student
+          where cid=#{cid}
+    </select>
+</mapper>

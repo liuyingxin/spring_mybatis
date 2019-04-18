@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="page">
+    <select id="selectMyUser" resultType="com.xin.bean.User">
+        select * from user limit #{startIndex},#{pageSize}
+    </select>
+    <select id="selectMyAllUser" resultType="com.xin.bean.User">
+        select * from user
+    </select>
+
+    <select id="selectDynamicUser" resultType="com.xin.bean.User">
+        select * from user
+        <where>
+            <if test="usercode!=null">
+                usercode =#{usercode}
+            </if>
+            <if test="userpswd!=null">
+                and userpswd=#{userpswd}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUserInRange" resultType="com.xin.bean.User">
+
+        select * from user where usercode in(
+        <foreach collection="usercodes" item="usercode" separator=",">
+            #{usercode}
+        </foreach>
+        )
+    </select>
+</mapper>

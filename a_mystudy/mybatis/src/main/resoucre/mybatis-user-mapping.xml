@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+            PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace（命名解析）：
+    为了减少输入量，MyBatis 对所有的命名配置元素（包括语句，结果映射，缓存等）使用了如下的命名解析规则。-->
+<!--完全限定名（比如 “com.mypackage.MyMapper.selectAllThings）将被直接用于查找及使用。-->
+<!--短名称（比如 “selectAllThings”）如果全局唯一也可以作为一个单独的引用。
+   如果不唯一，有两个或两个以上的相同名称（比如 “com.foo.selectAllThings” 和 “com.bar.selectAllThings”），
+   那么使用时就会产生“短名称不唯一”的错误，这种情况下就必须使用完全限定名。-->
+<mapper namespace="user">
+    <!--查询标签
+    id属性表示SQL映射id，将id和SQL绑定在一起，访问id的时候，就等同于访问sql文
+    resultType属性表示查询结果所转换的类型，取值为类的全名（包含包名）
+    标签体为sql，但是不是最终要执行的sql，需要被框架进行转换
+    -->
+    <select id="selectUsers"  resultType="com.xin.bean.User">
+        select usercode,userpswd,username,redate from user where usercode=#{usercode}
+    </select>
+    <select id="selectUser"  resultType="com.xin.bean.User">
+         select usercode,userpswd,username,redate from user where usercode =#{usercode} and userpswd=#{userpswd}
+</select>
+    <!--<select id="selectUser"  resultType="com.xin.bean.User">-->
+        <!--select * from user where usercode = 'a'-->
+    <!--</select>-->
+
+     <select id="selectTableName"  resultType="com.xin.bean.User">
+         select * from ${tableName}
+    </select>
+    <select id="selectColName"  resultType="com.xin.bean.User">
+         select ${colName} from user
+    </select>
+    <select id="selectOrder"  resultType="com.xin.bean.User">
+         select usercode,userpswd,username,redate from user order by redate ${orderType}
+    </select>
+    <select id="selectLikeName"   resultType="com.xin.bean.User">
+         select usercode,userpswd,username,redate from user where usercode like  concat('%','${usercode}','%' )
+    </select>
+
+    <resultMap id="empMap" type="com.xin.bean.Emp">
+
+        <id column="usercode" property="eno"></id>
+        <result column="username" property="ename"></result>
+    </resultMap>
+
+    <select id="selectUser1"   resultMap="empMap">
+         select usercode,userpswd,username,redate from user
+    </select>
+
+    <select id="selectUserByCode"   resultType="java.util.HashMap">
+         select usercode,userpswd,username,redate from user where usercode = #{usercode}
+    </select>
+    <select id="selectUserSimple"   resultType="java.lang.String">
+         select userpswd,username,redate
+         from user where usercode = #{usercode}
+    </select>
+
+</mapper>

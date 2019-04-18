@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--XML 配置文件中包含了对 MyBatis 系统的核心设置，-->
+        <!--包含获取数据库连接实例的数据源（DataSource）和决定事务作用域和控制方式的事务管理器-->
+<configuration>
+    <properties resource="db-config.properties">
+    </properties>
+
+    <!--设置缓存、延迟加载等重要的运行时的行为-->
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+    </settings>
+    <!--<settings>-->
+    <!--<setting name="cacheEnabled" value="true"/>-->
+    <!--<setting name="lazyLoadingEnabled" value="true"/>-->
+    <!--<setting name="multipleResultSetsEnabled" value="true"/>-->
+    <!--<setting name="useColumnLabel" value="true"/>-->
+    <!--<setting name="useGeneratedKeys" value="false"/>-->
+    <!--<setting name="autoMappingBehavior" value="PARTIAL"/>-->
+    <!--<setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>-->
+    <!--<setting name="defaultExecutorType" value="SIMPLE"/>-->
+    <!--<setting name="defaultStatementTimeout" value="25"/>-->
+    <!--<setting name="defaultFetchSize" value="100"/>-->
+    <!--<setting name="safeRowBoundsEnabled" value="false"/>-->
+    <!--<setting name="mapUnderscoreToCamelCase" value="false"/>-->
+    <!--<setting name="localCacheScope" value="SESSION"/>-->
+    <!--<setting name="jdbcTypeForNull" value="OTHER"/>-->
+    <!--<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>-->
+    <!--</settings>-->
+
+    <!--类型别名是为 Java 类型设置一个短的名字。
+     它只和 XML 配置有关，存在的意义仅在于用来减少类完全限定名的冗余-->
+    <!--<typeAliases >-->
+    <!--<typeAlias alias="user" type="com.xin.bean.user"></typeAlias>-->
+    <!--</typeAliases>-->
+
+    <!--插件-->
+    <!--MyBatis 允许你在已映射语句执行过程中的某一点进行拦截调用。默认情况下，MyBatis 允许使用插件来拦截的方法调用包括
+         Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed)
+         ParameterHandler (getParameterObject, setParameters)
+         ResultSetHandler (handleResultSets, handleOutputParameters)
+         StatementHandler (prepare, parameterize, batch, update, query)
+    -->
+    <!--<plugins>-->
+        <!--<plugin interceptor="Executor"></plugin>-->
+    <!--</plugins>-->
+
+
+    <!--环境配置-->
+    <environments default="development">
+        <!--environment 元素体中包含了事务管理和连接池的配置-->
+        <environment id="development">
+            <!--事务管理器
+                事务采取JDBC的处理方式-->
+            <!--JDBC – 这个配置就是直接使用了 JDBC 的提交和回滚设置，它依赖于从数据源得到的连接来管理事务作用域。-->
+            <!--MANAGED – 这个配置几乎没做什么。它从来不提交或回滚一个连接，而是让容器来管理事务的整个生命周期（比如 JEE 应用服务器的上下文）。 -->
+            <!--默认情况下它会关闭连接，然而一些容器并不希望这样，因此需要将 closeConnection 属性设置为 false 来阻止它默认的关闭行为。-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--数据源
+            POOLED表示使用连接池,这种数据源的实现利用“池”的概念将 JDBC 连接对象组织起来，避免了创建新的连接实例时所必需的初始化和认证时间。
+            UNPOOLED表示不使用连接池, 这个数据源的实现只是每次被请求时打开和关闭连接。
+            JNDI：这个数据源的实现是为了能在如 EJB 或应用服务器这类容器中使用，容器可以集中或在外部配置数据源，然后放置一个 JNDI 上下文的引用
+            -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driverClass}"></property>
+                <property name="url" value="${jdbc.url}"></property>
+                <property name="username" value="${jdbc.user}"></property>
+                <property name="password" value="${jdbc.password}"></property>
+            </dataSource>
+        </environment>
+    </environments>
+
+        <!--数据库厂商<databaseIdProvider type="DB_VENDOR"></databaseIdProvider>-->
+
+
+    <!--映射文件-->
+    <mappers>
+        <!--MyBatis 到哪里去找映射文件。
+         使用类相对于类路径的资源引用(resource)，  <mapper resource="org/mybatis/builder/AuthorMapper.xml"/>
+         或完全限定资源定位符（URL）,<mapper url="file:///var/mappers/AuthorMapper.xml"/>
+         使用映射器接口实现类的完全限定类名 (class) <mapper class="org.mybatis.builder.AuthorMapper"/>
+          将包内的映射器接口实现全部注册为映射器  <package name="org.mybatis.builder"/>
+         -->
+
+        <mapper  resource="mybatis-user-mapping.xml"></mapper>
+        <mapper  resource="mybatis-dao-mapping.xml"></mapper>
+        <mapper  resource="mybatis-page-mapping.xml"></mapper>
+        <mapper  resource="mybatis-cud-mapping.xml"></mapper>
+        <mapper  resource="mybatis-student-mapping.xml"></mapper>
+        <mapper  resource="mybatis-menu-mapping.xml"></mapper>
+    </mappers>
+
+
+
+    <!--类型处理器（typeHandlers）-->
+    <!--无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数时，还是从结果集中取出一个值时，
+    都会用类型处理器将获取的值以合适的方式转换成 Java 类型-->
+    <!--枚举类型EnumTypeHandler（VARCHAR 或任何兼容的字符串类型，用以存储枚举的名称（而不是索引值））
+        EnumOrdinalTypeHandler任何兼容的 NUMERIC 或 DOUBLE 类型，存储枚举的序数值（而不是名称）。
+     在配置文件中把 EnumOrdinalTypeHandler 加到 typeHandlers 中即可， 这样每个 RoundingMode 将通过他们的序数值来映射成对应的整型数值。-->
+    <!--<typeHandlers>-->
+    <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="java.math.RoundingMode"></typeHandler>-->
+    <!--</typeHandlers>-->
+
+    <!--MyBatis 每次创建结果对象的新实例时，它都会使用一个对象工厂（ObjectFactory）实例来完成。 默认的对象工厂需要做的仅仅是实例化目标类，-->
+    <!--要么通过默认构造方法，要么在参数映射存在的时候通过参数构造方法来实例化。 如果想覆盖对象工厂的默认行为，则可以通过创建自己的对象工厂来实现。-->
+    <!--<objectFactory type="com.xin">-->
+        <!--<property name="som" value="100"></property>-->
+    <!--</objectFactory>-->
+
+
+</configuration>
