@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="user" class="com.xin.Spring.bean.User">
+        <property name="usercode" value="2001"></property>
+        <property name="username" value="zhangsan"></property>
+        <!--<property name="dept" ref="dept"></property>-->
+        <property name="deptname" value="#{dept.deptname.toLowerCase()}"></property>
+    </bean>
+    <bean id="dept" class="com.xin.Spring.bean.Dept">
+        <property name="deptid" value="2002"></property>
+        <property name="deptname" value="XXX"></property>
+    </bean>
+</beans>
